@@ -1,5 +1,5 @@
 # Creddit
-Clojure wrapper for Reddit API  
+My personal fork of Clojure wrapper for Reddit API (creddit). This version contains changes -- submitted to the original source project -- for fetching entities by ID.
 
 [![Build Status](https://travis-ci.org/ThatGuyHughesy/creddit.svg?branch=master)](https://travis-ci.org/ThatGuyHughesy/creddit)
 [![Clojars Project](https://img.shields.io/clojars/v/creddit.svg)](https://clojars.org/creddit)
