@@ -28,6 +28,34 @@
       (ex-info "Invalid time - Must be one of the following: :hour, :day, :week, :month, :year, :all."
                {:causes :invalid-time}))))
 
+(defn- valid-top-level-kind? [topLevelKind]
+  (if (and (keyword? topLevelKind) (contains? #{:user :subreddit} topLevelKind))
+    topLevelKind
+    (throw 
+      (ex-info "Invalid top level kind - Must be one of the following: :user, :subreddit."))))
+  
+(defn- valid-direction? [direction]
+  (if (and (keyword? direction) (contains? #{:before :after} direction))
+    direction
+    (throw 
+      (ex-info "Invalid direction - Must be one of the following: :before, :after."))))
+
+(defn- valid-entity? [entity]
+  (if (and (keyword? entity) (contains? #{:comment :submission} entity))
+    entity
+    (throw 
+      (ex-info "Invalid direction - Must be one of the following: :comment, :submission."))))
+
+(defn- item-code [entryKind]
+  (case entryKind
+    :comment "t1_"
+    :submission "t3_"))
+
+(defn- before-or-after [direction entryId entryKind]
+  (case direction
+    :before (str "&before=" (item-code entryKind) entryId)
+    :after (str "&after=" (item-code entryKind) entryId)))
+
 (defn get-access-token-with-user
   [credentials]
   (try+
@@ -78,6 +106,12 @@
                    :conn-timeout 10000
                    :as :json})
       (get :body)))
+
+(defn- get-entities-window
+  [credentials slug entityId limit time direction entityKind topLevelKind]
+  (if (and (valid-limit? limit) (valid-time? time) (valid-entity? entityKind) (valid-top-level-kind? topLevelKind) (valid-direction? direction))
+    (-> (http-get credentials (str "https://www.reddit.com/" (name topLevelKind) "/" slug "/" (name topLevelKind) "/.json?limit=" limit "&t=" (name time) (before-or-after direction entityId :comment))))
+        (parse-response))) 
 
 (defn frontpage
   [credentials limit time]
@@ -144,6 +178,14 @@
   (if (valid-limit? limit)
     (-> (http-get credentials (str "https://www.reddit.com/r/" subreddit "/comments/.json?limit=" limit))
         (parse-response))))
+
+(defn subreddit-posts-after
+  [credentials subreddit postId limit time]
+  (get-entities-window credentials subreddit postId limit time :after :submission :subreddit))
+
+(defn subreddit-comments-before
+  [credentials subreddit commentId limit time]
+  (get-entities-window credentials subreddit commentId limit time :before :comment :subreddit))
 
 (defn subreddit-search
   [credentials subreddit query limit]
@@ -214,6 +256,14 @@
   (if (and (valid-limit? limit) (valid-time? time))
     (-> (http-get credentials (str "https://www.reddit.com/user/" username "/comments/.json?limit=" limit "&t=" (name time)))
         (parse-response))))
+
+(defn user-posts-after
+  [credentials username postId limit time]
+  (get-entities-window credentials username postId limit time :after :comment :user))
+
+(defn user-comments-before
+  [credentials username commentId limit time]
+  (get-entities-window credentials username commentId limit time :before :comment :user))
 
 (defn user-trophies
   [credentials username]
