@@ -112,11 +112,16 @@
     :user (name topLevelKind)
     :subreddit "r"))
 
+(defn- parse-entity-kind [entityKind]
+  (case entityKind
+    :comment "/comments"
+    :submission "/submitted"))
+
 (defn- get-entities-window
   [credentials slug entityId limit time direction entityKind topLevelKind]
   (if (and (valid-limit? limit) (valid-time? time) (valid-entity? entityKind) (valid-top-level-kind? topLevelKind) (valid-direction? direction))
-    (-> (http-get credentials (str "https://www.reddit.com/" (parse-top-level topLevelKind) "/" slug "/" (name entityKind) "s/.json?limit=" limit "&t=" (name time) (before-or-after direction entityId entityKind))))
-        (parse-response))) 
+    (-> (http-get credentials (str "https://www.reddit.com/" (parse-top-level topLevelKind) "/" slug (parse-entity-kind entityKind) "/.json?limit=" limit "&t=" (name time) (before-or-after direction entityId entityKind)))
+        (parse-response))))
 
 (defn frontpage
   [credentials limit time]
@@ -183,16 +188,7 @@
   (if (valid-limit? limit)
     (-> (http-get credentials (str "https://www.reddit.com/r/" subreddit "/comments/.json?limit=" limit))
         (parse-response))))
-
-(defn subreddit-posts-after
-  [credentials subreddit postId limit time]
-  (get-entities-window credentials subreddit postId limit time :after :submission :subreddit))
-
-(defn subreddit-posts-before
-  [credentials subreddit postId limit time]
-  (get-entities-window credentials subreddit postId limit time :before :submission :subreddit))
-
-
+      
 (defn subreddit-comments-before
   [credentials subreddit commentId limit time]
   (get-entities-window credentials subreddit commentId limit time :before :comment :subreddit))
