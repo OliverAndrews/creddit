@@ -44,7 +44,7 @@
   (if (and (keyword? entity) (contains? #{:comment :submission} entity))
     entity
     (throw 
-      (ex-info "Invalid direction - Must be one of the following: :comment, :submission."))))
+      (ex-info "Invalid entity - Must be one of the following: :comment, :submission."))))
 
 (defn- item-code [entityKind]
   (case entityKind
