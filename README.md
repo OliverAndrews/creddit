@@ -84,7 +84,7 @@ Once you have your credentials loaded in you can initialise the client:
 *Retrieve recent comments from subreddit*
 
 **subreddit:** Name of subreddit (Eg: "programming", "funny", "pics" etc...)  
-**limit:** Maximum number of comments to retrieve (Minimum: 1, Maximum: 100)
+**limit:** Maximum number of comments to retrieve (Minimum: 1, Maximum: 100)  
 **commentId:** ID without [fullname](https://www.reddit.com/dev/api/#fullnames) prefix of the comment you would like to search from.
 
 ```clojure
@@ -164,7 +164,7 @@ Once you have your credentials loaded in you can initialise the client:
 
 **username:** Name of user (Eg: "thisisbillgates", "awildsketchappeared", "way_fairer" etc...)  
 **limit:** Maximum number of posts to retrieve (Minimum: 1, Maximum: 100)  
-**time:** Time span of query (One of :hour, :day, :week, :month, :year, :all)
+**time:** Time span of query (One of :hour, :day, :week, :month, :year, :all)  
 **postId:** ID without [fullname](https://www.reddit.com/dev/api/#fullnames) prefix of the post you would like to search from.
 
 ```clojure
@@ -179,7 +179,7 @@ Once you have your credentials loaded in you can initialise the client:
 
 **username:** Name of user (Eg: "thisisbillgates", "awildsketchappeared", "way_fairer" etc...)  
 **limit:** Maximum number of posts to retrieve (Minimum: 1, Maximum: 100)  
-**time:** Time span of query (One of :hour, :day, :week, :month, :year, :all)
+**time:** Time span of query (One of :hour, :day, :week, :month, :year, :all)  
 **commentId:** ID without [fullname](https://www.reddit.com/dev/api/#fullnames) prefix of the comment you would like to search from.
 
 ```clojure
