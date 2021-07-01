@@ -129,28 +129,6 @@
            parsed-reddit-response))
       (is (thrown? Exception (client/subreddit-comments creddit-client "notinteresting" "10")))))
 
-(deftest test-subreddit-comments-after
-  (testing "Retrieve user comments after given ID"
-    (is (= (with-fake-routes
-             {"https://www.reddit.com/user/Poem_for_your_sprog/comments/.json?limit=10&t=all"
-              (fn [request]
-                {:status 200 :headers {} :body reddit-response})}
-             (client/user-comments creddit-client "Poem_for_your_sprog" 10 :all))
-           parsed-reddit-response))
-    (is (thrown? Exception (client/user-comments creddit-client "Poem_for_your_sprog" "10" :all)))
-    (is (thrown? Exception (client/user-comments creddit-client "Poem_for_your_sprog" 10 "all")))))
-
-(deftest test-subreddit-comments-before
-  (testing "Retrieve user comments before given ID"
-    (is (= (with-fake-routes
-             {"https://www.reddit.com/user/Poem_for_your_sprog/comments/.json?limit=10&t=all"
-              (fn [request]
-                {:status 200 :headers {} :body reddit-response})}
-             (client/user-comments creddit-client "Poem_for_your_sprog" 10 :all))
-           parsed-reddit-response))
-    (is (thrown? Exception (client/user-comments creddit-client "Poem_for_your_sprog" "10" :all)))
-    (is (thrown? Exception (client/user-comments creddit-client "Poem_for_your_sprog" 10 "all")))))
-
 (deftest test-subreddit-search
   (testing "Search subreddit posts"
     (is (= (with-fake-routes
@@ -273,24 +251,24 @@
 (deftest test-user-comments-after
   (testing "Retrieve user comments after given ID"
     (is (= (with-fake-routes
-             {"https://www.reddit.com/user/Poem_for_your_sprog/comments/.json?limit=10&t=all"
+             {"https://www.reddit.com/user/Poem_for_your_sprog/comments/.json?limit=10&t=all&after=t1_h36hinb"
               (fn [request]
                 {:status 200 :headers {} :body reddit-response})}
-             (client/user-comments creddit-client "Poem_for_your_sprog" 10 :all))
+             (client/user-comments-after creddit-client "Poem_for_your_sprog" "h36hinb" 10 :all))
            parsed-reddit-response))
-    (is (thrown? Exception (client/user-comments creddit-client "Poem_for_your_sprog" "10" :all)))
-    (is (thrown? Exception (client/user-comments creddit-client "Poem_for_your_sprog" 10 "all")))))
+    (is (thrown? Exception (client/user-comments-after creddit-client "Poem_for_your_sprog" "h36hinb" "10" :all)))
+    (is (thrown? Exception (client/user-comments-after creddit-client "Poem_for_your_sprog" "h36hinb" 10 "all")))))
 
 (deftest test-user-comments-before
   (testing "Retrieve user comments before given ID"
     (is (= (with-fake-routes
-             {"https://www.reddit.com/user/Poem_for_your_sprog/comments/.json?limit=10&t=all"
+             {"https://www.reddit.com/user/Poem_for_your_sprog/comments/.json?limit=10&t=all&before=t1_h36hinb"
               (fn [request]
                 {:status 200 :headers {} :body reddit-response})}
-             (client/user-comments creddit-client "Poem_for_your_sprog" 10 :all))
+             (client/user-comments-before creddit-client "Poem_for_your_sprog" "h36hinb" 10 :all))
            parsed-reddit-response))
-    (is (thrown? Exception (client/user-comments creddit-client "Poem_for_your_sprog" "10" :all)))
-    (is (thrown? Exception (client/user-comments creddit-client "Poem_for_your_sprog" 10 "all")))))
+    (is (thrown? Exception (client/user-comments-before creddit-client "Poem_for_your_sprog" "h36hinb" "10" :all)))
+    (is (thrown? Exception (client/user-comments-before creddit-client "Poem_for_your_sprog" "h36hinb" 10 "all")))))
 
 (deftest test-user-trophies
   (testing "Retrieve user trophies"
@@ -320,7 +298,6 @@
              (client/users-new creddit-client 10))
            parsed-reddit-response))
     (is (thrown? Exception (client/users-new creddit-client "10")))))
-
 
 (deftest test-users-popular
   (testing "Retrieve popular users"
