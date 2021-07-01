@@ -85,9 +85,14 @@ Once you have your credentials loaded in you can initialise the client:
 
 **subreddit:** Name of subreddit (Eg: "programming", "funny", "pics" etc...)  
 **limit:** Maximum number of comments to retrieve (Minimum: 1, Maximum: 100)
+**commentId:** ID without [fullname](https://www.reddit.com/dev/api/#fullnames) prefix of the comment you would like to search from.
 
 ```clojure
 (creddit/subreddit-comments creddit-client subreddit limit)
+
+(creddit/subreddit-comments-after creddit-client subreddit commentId limit)
+
+(creddit/subreddit-comments-before creddit-client subreddit commentId limit)
 ```
 
 *Search subreddit's posts*
@@ -160,9 +165,14 @@ Once you have your credentials loaded in you can initialise the client:
 **username:** Name of user (Eg: "thisisbillgates", "awildsketchappeared", "way_fairer" etc...)  
 **limit:** Maximum number of posts to retrieve (Minimum: 1, Maximum: 100)  
 **time:** Time span of query (One of :hour, :day, :week, :month, :year, :all)
+**postId:** ID without [fullname](https://www.reddit.com/dev/api/#fullnames) prefix of the post you would like to search from.
 
 ```clojure
 (creddit/user-posts creddit-client username limit time)
+
+(creddit/user-posts-after creddit-client username postId limit time)
+
+(creddit/user-posts-before creddit-client username postId limit time)
 ```
 
 *Retrieve user comments*
@@ -170,9 +180,14 @@ Once you have your credentials loaded in you can initialise the client:
 **username:** Name of user (Eg: "thisisbillgates", "awildsketchappeared", "way_fairer" etc...)  
 **limit:** Maximum number of posts to retrieve (Minimum: 1, Maximum: 100)  
 **time:** Time span of query (One of :hour, :day, :week, :month, :year, :all)
+**commentId:** ID without [fullname](https://www.reddit.com/dev/api/#fullnames) prefix of the comment you would like to search from.
 
 ```clojure
 (creddit/user-comments creddit-client username limit time)
+
+(creddit/user-comments-after creddit-client username commentId limit time)
+
+(creddit/user-comments-before creddit-client username commentId limit time)
 ```
 
 ### Users
